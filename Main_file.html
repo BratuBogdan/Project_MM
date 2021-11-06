@@ -1,0 +1,169 @@
+<html>
+    <head>
+        <style>
+            #dragndrop {
+                width: 480;
+                border: 4px dotted #ccc;
+                border-radius:20px;
+                font-family: sans-serif;
+            }
+            #f1 {
+                border-left: 10;
+            }
+            #dragndrop:hover{
+                border-color: purple;
+            }
+            hr{
+                border:none;
+                height: 2px;
+                background-color: #333;
+            }
+            #flex-container{
+                display: flex;
+            }
+            #flex-container2{
+                display: flex;
+            }
+            #tools1{
+                flex:0.3;
+                background-color: purple;
+            }
+            #tools2{
+                flex:0.3;
+                background-color: purple;
+            }
+            #editing_picture{
+                flex:1.6;
+            }
+            #child1{
+                flex:0.3;
+                margin-right: 20px;
+            }
+            #image{
+                flex:1.7;
+            }
+            #ball{
+                width: 300px;
+                height: 300px;
+            }
+            #editedPicture{
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+            }
+        </style>
+
+
+
+        <script type="text/javascript">
+        function app(){
+
+            //drag n' drop 
+          
+            let zona=document.querySelector('#dragndrop');
+            zona.addEventListener('dragover', e=> e.preventDefault());
+            zona.addEventListener('drop', e=>{
+                e.preventDefault();
+                LoadImageFiles(e.dataTransfer.files);
+            });
+            //choose local file
+            let btnFile=document.querySelector('#btnFile');
+            btnFile.addEventListener('click', e=>{
+                let input=document.querySelector('#chosen_file');
+                LoadImageFiles(input.files);
+
+
+            })
+
+            
+            //click on any image
+                let div=document.getElementById('image');
+                for(var i=0; i<div.childNodes;i++){
+                    div.childNodes[i].addEventListener('click', e=>{
+                        SelectImage(e.target.result);
+                        console.log("asta merge!");
+                    })
+                }
+
+                document.querySelectorAll('img').forEach(item => {
+                  item.addEventListener('click', event => {
+                     console.log('merge');
+                     SelectImage(event.target);
+                 })
+                })
+
+
+        };
+
+        document.addEventListener('DOMContentLoaded', app);
+
+        function LoadImage(source){
+            let image=document.createElement('img');
+            let container=document.querySelector('#image');
+
+            image.width=200;
+            image.height=120;
+            image.src=source;
+            image.addEventListener('load', e =>{
+                console.log('image loaded');
+            })
+            image.addEventListener('click', event => {
+                     console.log('merge 2');
+
+                     let cont2=document.querySelector('#editing_picture');
+                     let imgEdited=document.getElementById('editedPicture');
+                     imgEdited.src=image.src;
+                   //  let cln= image.cloneNode(true);
+                    // cont2.append(cln);
+                 })
+            container.append(image);
+        }
+
+        function LoadImageFiles(files){
+            for(let file of files){
+                let fileReader= new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.addEventListener('load', e=> {
+                    LoadImage(e.target.result);
+                })
+            }
+
+        }
+        
+        
+
+        </script>   
+        <title>ImageBreaker</title>     
+    </head>
+
+    <body>
+        <div id="flex-container">
+        <div  id="child1">
+        <div id="dragndrop">
+            <p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region!</p>
+        <form id="f1">
+            <input type="file" id="chosen_file" multiple/>
+            <input type="button" id="btnFile" value="Load selected images"/>
+        </form>
+        </div>
+        </div>
+        
+        <div id="image"></div>
+      </div>
+      <hr>
+<div id='flex-container2'>
+    
+    <div id=tools1>
+
+    </div>
+
+      <div id="editing_picture">
+          <img id="editedPicture">  
+    </div>
+
+    <div id="tools2">
+
+    </div>
+</div>
+    </body>
+</html>
